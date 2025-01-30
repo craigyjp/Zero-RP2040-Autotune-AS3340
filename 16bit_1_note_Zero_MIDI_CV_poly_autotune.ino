@@ -434,6 +434,7 @@ void loop() {
     MIDI.read(masterChan);  //MIDI 5 Pin DIN
     //readNoteCV();
     mod_task();
+    pwm_task();
     adjustInterval();
     updateVoice1();
   }
@@ -687,6 +688,22 @@ void myControlChange(byte channel, byte number, byte value) {
         }
         break;
 
+      case 23:
+        PW1 = map(value, 0, 127, 0, 43253);
+        break;
+
+      case 24:
+        PWM1 = map(value, 0, 127, 0, 43253);
+        break;
+
+      case 25:
+        PW2 = map(value, 0, 127, 0, 43253);
+        break;
+
+      case 26:
+        PWM2 = map(value, 0, 127, 0, 43253);
+        break;      
+
       case 65:  // Portamento on/off
         switch (value) {
           case 127:
@@ -718,6 +735,14 @@ void myControlChange(byte channel, byte number, byte value) {
         }
         break;
 
+      case 123:
+        switch (value) {
+          case 127:
+            allNotesOff();
+            break;
+        }
+        break;
+
       case 127:
         keyboardMode = map(value, 0, 127, 0, 2);
         if (keyboardMode > 0 && keyboardMode < 3) {
@@ -745,6 +770,15 @@ void mod_task() {
   FM_AT_VALUE = map(MOD_VALUE, 0, 4095, FM_AT_RANGE_LOWER, FM_AT_RANGE_UPPER);
   TM_VALUE = map(MOD_VALUE, 0, 4095, TM_RANGE_LOWER, TM_RANGE_UPPER);
   TM_AT_VALUE = map(MOD_VALUE, 0, 4095, TM_AT_RANGE_LOWER, TM_AT_RANGE_UPPER);
+}
+
+// Get the LFO input on the FM_INPUT
+void pwm_task() {
+
+  PWM_VALUE = analogRead(PWM_INPUT);
+  PWM1_VALUE = map(PWM_VALUE, 0, 4095, 0, PWM1);
+  PWM2_VALUE = map(PWM_VALUE, 0, 4095, 0, PWM2);
+
 }
 
 void commandTopNote() {
@@ -982,6 +1016,18 @@ void updateVoice1() {
     velmV = ((unsigned int)((float)voices[0].velocity) * VEL_SF);
     vel_data1 = (channel_d & 0xFFF0000F) | (((int(velmV)) & 0xFFFF) << 4);
     outputDAC(DAC_NOTE1, vel_data1);
+
+    sample_data1 = (channel_e & 0xFFF0000F) | (((int(PW1)) & 0xFFFF) << 4);
+    outputDAC(DAC_NOTE1, sample_data1);
+
+    sample_data1 = (channel_f & 0xFFF0000F) | (((int(PWM1_VALUE)) & 0xFFFF) << 4);
+    outputDAC(DAC_NOTE1, sample_data1);
+
+    sample_data1 = (channel_g & 0xFFF0000F) | (((int(PW2)) & 0xFFFF) << 4);
+    outputDAC(DAC_NOTE1, sample_data1);
+
+    sample_data1 = (channel_h & 0xFFF0000F) | (((int(PWM2_VALUE)) & 0xFFFF) << 4);
+    outputDAC(DAC_NOTE1, sample_data1);
 
     // Update last update time
     lastUpdateTime = currentTime;

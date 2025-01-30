@@ -13,6 +13,8 @@
 
 #define FM_INPUT 29
 #define VOLT_OCT_INPUT 28
+// 27 is used for mux on main
+#define PWM_INPUT 26
 
 //Note DACS
 #define DAC_NOTE1 5
@@ -40,7 +42,6 @@
 
 //Gate outputs
 #define SYNC_PIN 14
-
 
 void setupHardware() {
 
