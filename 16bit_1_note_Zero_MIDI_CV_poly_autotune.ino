@@ -230,8 +230,8 @@ void autotune() {
   Serial.print("Initial Frequency: ");
   Serial.println(initialFreq);
 
-  int minError = -1023;
-  int maxError = 1023;
+  int minError = -255;
+  int maxError = 255;
   int bestError = 0;
   double bestFreqDiff = DBL_MAX;
 
@@ -689,19 +689,19 @@ void myControlChange(byte channel, byte number, byte value) {
         break;
 
       case 23:
-        PW1 = map(value, 0, 127, 0, 43253);
+        PW1 = map(value, 0, 127, 0, 17000);
         break;
 
       case 24:
-        PWM1 = map(value, 0, 127, 0, 43253);
+        PWM1 = map(value, 0, 127, 0, 20000);
         break;
 
       case 25:
-        PW2 = map(value, 0, 127, 0, 43253);
+        PW2 = map(value, 0, 127, 0, 17000);
         break;
 
       case 26:
-        PWM2 = map(value, 0, 127, 0, 43253);
+        PWM2 = map(value, 0, 127, 0, 20000);
         break;      
 
       case 65:  // Portamento on/off
