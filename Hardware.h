@@ -5,6 +5,7 @@
 #define CV_MAX_VOLTAGE 5.0  // Maximum input voltage for 5 octaves
 #define ADC_REF_VOLTAGE 3.3 // Reference voltage (adjust for your board)
 
+
 #define FORMAT_LITTLEFS_IF_FAILED true
 
 // Voices available
