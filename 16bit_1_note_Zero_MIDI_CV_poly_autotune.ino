@@ -67,17 +67,17 @@ const int channel = 1;
 Adafruit_NeoPixel pixels(NUM_PIXELS, LED_PIN, NEO_GRB + NEO_KHZ800);
 
 void setup() {
-  // Serial.begin(115200);
+  Serial.begin(115200);
 
   // while (!Serial)
   //   ;  // Wait for Serial to connect
 
   if (!LittleFS.begin()) {
-    //Serial.println("Failed to mount LittleFS");
+    Serial.println("Failed to mount LittleFS");
     return;
   }
 
-  //Serial.println("LittleFS mounted successfully");
+  Serial.println("LittleFS mounted successfully");
 
   pinMode(AUTO_INPUT, INPUT_PULLUP);
 
